@@ -26,24 +26,22 @@ public class TelegramBot extends TelegramLongPollingBot {
     @SneakyThrows
     @Override
     public void onUpdateReceived(Update update) {
-        if(update.hasMessage() && update.hasMessage().hasText()){
+        if(update.hasMessage()/* && update.hasMessage().hasText()*/){
             String messageText = update.getMessage().getText();
             long chatId = update.getMessage().getChatId();
 
             switch (messageText){
                 case "/start":
-                    try{
-                        startCommandReceived(chatId, update.getMessage().getChatId().getFirstName());
-                    }
-                    catch (TelegramApiException e){
-                        throw new RuntimeException(e);
-                    }
+
+                    startCommandReceived(chatId, update.getMessage().getForwardSenderName());
+                    break;
+
                 default: sendMessage(chatId, "Sorry, command was not recognized");
             }
         }
     }
 
-    private void startCommandReceived(long chatId, String name) throws TelegramApiException{
+    private void startCommandReceived(long chatId, String name) throws TelegramApiException {
         String answer = "Hi, " + name +", nice to meet you!";
         sendMessage(chatId, answer);
     }
@@ -57,7 +55,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             execute(message);
         }
         catch (TelegramApiException e) {
-
+            throw new RuntimeException(e);
         }
     }
 
