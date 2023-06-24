@@ -14,6 +14,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     final BotConfig config;
 
     public TelegramBot(BotConfig config){
+        super(config.getToken());
         this.config = config;
     }
 
